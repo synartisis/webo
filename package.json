@@ -1,10 +1,9 @@
 {
   "name": "webo",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "web development made easy",
   "main": "index.js",
-  "scripts": {
-  },
+  "scripts": {},
   "keywords": [],
   "author": "mgalakos",
   "license": "ISC",
