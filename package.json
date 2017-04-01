@@ -8,9 +8,7 @@
   "author": "mgalakos",
   "license": "ISC",
   "dependencies": {
-    "serve-static": "^1.12.1"
-  },
-  "devDependencies": {
+    "serve-static": "^1.12.1",
     "babel-core": "^6.24.0",
     "babel-polyfill": "^6.23.0",
     "babel-preset-env": "^1.2.2",
@@ -26,5 +24,7 @@
     "shelljs": "^0.7.7",
     "uglify-js2": "^2.1.11",
     "ws": "^2.2.1"
+  },
+  "devDependencies": {
   }
 }
