@@ -1,4 +1,7 @@
+- cli build
 - css minify
+
+
 - reload vendor when module reloaded
 - run build with NODE_ENV=production
 
