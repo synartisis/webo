@@ -9,3 +9,4 @@
 - css bundle
 - css resolve
 - .vue files
+- config.include : glob array
