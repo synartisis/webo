@@ -4,21 +4,74 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>webo</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>webo</h1>
-  <div>
-    <button onclick="build()">build</button>
+  <div id="app" class="flex-column">
+
+    <header class="flex-row">
+      <h1 class="flex">webo</h1>
+      <nav>
+        <ul>
+          <li v-for="section of sections" :class="{ active: section === activeSection }">
+            <a @click="selectSection(section)">{{ section }}</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+
+      <section id="config" v-if="activeSection === 'config'">
+        <pre>{{data}}</pre>
+      </section>
+
+      <section id="files" v-if="activeSection === 'files'">
+        <div class="subheader">
+          <input type="text" v-model="filter.path" placeholder="filename">
+          <input type="text" v-model="filter.token" placeholder="filter">
+          <input type="checkbox" v-model="filter.html">.html
+          <input type="checkbox" v-model="filter.js">.js
+          <input type="checkbox" v-model="filter.css">.css
+          <input type="checkbox" v-model="filter.other">.other
+          <button @click="resetFilter">reset</button>
+        </div>
+        <div class="flex screen-scroll">
+          <details v-for="file of filtered()">
+            <summary>{{ file.path }}</summary>
+            <div>
+              <pre>{{ file }}</pre>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section id="build" v-if="activeSection === 'build'">
+        <div class="subheader flex-row">
+          <button onclick="build()">build</button>
+          <div class="flex"></div>
+          <button @click="log = ''">clear log</button>
+        </div>
+        <div class="flex screen-scroll">
+          <pre>{{ log }}</pre>
+        </div>
+      </section>
+
+      <section id="raw" v-if="activeSection === 'raw'">
+        <pre>{{data}}</pre>
+      </section>
+
+    </main>
+
+    <footer class="flex-row" v-if="projectData">
+      <div>{{ projectData.context }}</div>
+      <div>files : {{ projectData.fileCount }}</div>
+    </footer>
+
   </div>
-  <pre id="out"></pre>
 
-  <script>
-    fetch('/webo/api').then(o => o.json()).then(json => document.querySelector('#out').textContent = JSON.stringify(json, null, 2))
-
-    function build() {
-      fetch('/webo/build').then(o => o.json()).then(json => document.querySelector('#out').textContent += '\n' + JSON.stringify(json, null, 2))
-    }
-  </script>
+  <script src="/webo/vue.js"></script>
+  <script src="/webo/index.js"></script>
 </body>
 </html>
