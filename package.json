@@ -14,6 +14,8 @@
     "chokidar": "^1.6.1",
     "glob": "^7.1.1",
     "jsdom": "^9.12.0",
+    "postcss": "^5.2.16",
+    "postcss-url": "^6.0.4",
     "rollup": "^0.41.6",
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-hypothetical": "^1.2.1",
