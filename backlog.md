@@ -1,4 +1,5 @@
 - cli build
+- ensure build is happening after all files are loaded
 - css minify
 
 
