@@ -1,3 +1,4 @@
+- layout assets hash
 - cli build
 - css minify
 
