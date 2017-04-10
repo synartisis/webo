@@ -7,6 +7,9 @@
   "keywords": [],
   "author": "mgalakos",
   "license": "ISC",
+  "bin": {
+    "webo": "cli.js"
+  },
   "dependencies": {
     "babel-core": "^6.24.0",
     "babel-polyfill": "^6.23.0",
