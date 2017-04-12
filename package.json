@@ -1,6 +1,6 @@
 {
   "name": "webo",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "web development made easy",
   "main": "index.js",
   "scripts": {},
