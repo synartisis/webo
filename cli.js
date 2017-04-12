@@ -4,7 +4,7 @@ const [ , , projectType, root ] = process.argv
 
 const { log } = require('./lib/utils')
 
-if (!projectType || !root) { console.log(`Usage : webo express [express_server_path]`); process.exit() }
+if (!projectType || !root) { log(`Usage : webo express [express_server_path]`); process.exit() }
 
 require('./lib/config')
 log('GREEN', 'webo starting')
