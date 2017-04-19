@@ -10,7 +10,7 @@ if (!projectType || !root) { log(`Usage : webo express [express_server_path]`); 
 const config = require('./lib/config')
 config.cliFlags = cliFlags
 log('GREEN', 'webo starting')
-log('TIMESTAMP')
+log('VERBOSE', 'TIMESTAMP')
 
 switch (projectType) {
   case 'express':
