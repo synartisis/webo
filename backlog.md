@@ -1,5 +1,4 @@
-- exclude layouts from build
-- css resolve - imports
+- exclude layouts and imported css from build
 
 
 - rivisit vendor / polyfills per page
