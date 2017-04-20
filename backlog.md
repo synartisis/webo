@@ -1,5 +1,3 @@
-- exclude layouts and imported css from build
-
 
 - rivisit vendor / polyfills per page
 - ensure build is happening after all files are loaded
