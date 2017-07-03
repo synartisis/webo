@@ -18,15 +18,20 @@ if (!root) root = '.'
   //   console.error(error.code === 'ENOENT' ? `Directory ${root} not found` : error)
   //   process.exit(1)
   // }
-  await state.init()
 
   switch (command) {
     case 'dev':
-      await require('./lib/dev/dev')
+      await state.init('dev')
+      await require('./lib/dev/dev')()
       break;
 
     case 'build':
-      await require('./lib/build/build')
+      await state.init('build')
+      await require('./lib/build/build')()
+      break;
+
+    case 'init':
+      await require('./lib/init/init')()
       break;
 
     default:
