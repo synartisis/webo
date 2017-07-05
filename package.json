@@ -7,6 +7,9 @@
   "keywords": [],
   "author": "mgalakos",
   "license": "ISC",
+  "engines": {
+    "node": ">= 8.0"
+  },
   "bin": {
     "webo": "cli.js"
   },
