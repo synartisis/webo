@@ -5,9 +5,19 @@ const { checkVersion } = require('./lib/utils')
 
 checkVersion()
 
-let [ , ,command, root ] = process.argv
+let [ , ,command, root, ...args ] = process.argv
 if (!command) command = 'dev'
 
+let options = {}
+args = args.join(' ').split('-').filter(o => !!o).map(o => o.trim())
+args.forEach(arg => {
+  const [ k, v ] = arg.split(' ')
+  if (k !== undefined && v !== undefined) {
+    options[k] = v
+  }
+})
+
+if (options.layout) options.config = { layout: options.layout } // HACK
 
 ;(async () => {
 
@@ -15,7 +25,9 @@ if (!command) command = 'dev'
   console.log('==', started.toISOString().split('T')[1], '==')
 
 
-  if (['dev', 'build'].includes(command)) await init(command, root)
+  if (command === 'dev' && options.express) require('./lib/dev/express')(options.express)
+
+  if (['dev', 'build'].includes(command)) await init(command, root, options)
 
   if (['dev', 'build', 'init'].includes(command)) {
     await require(`./lib/${command}/${command}`)()
