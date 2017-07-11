@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 
-const { init } = require('./lib/state')
+const state = require('./lib/state')
 const { checkVersion } = require('./lib/utils')
 
 checkVersion()
@@ -27,7 +27,7 @@ if (options.layout) options.config = { layout: options.layout } // HACK
 
   if (command === 'dev' && options.express) require('./lib/dev/express')(options.express)
 
-  if (['dev', 'build'].includes(command)) await init(command, root, options)
+  if (['dev', 'build'].includes(command)) await state.init(command, root, options)
 
   if (['dev', 'build', 'init'].includes(command)) {
     await require(`./lib/${command}/${command}`)()
@@ -41,3 +41,6 @@ if (options.layout) options.config = { layout: options.layout } // HACK
   console.log('== Time elapsed', (ended.getTime() - started.getTime()) / 1000, 's ==')
 
 })()
+
+
+process.on('unhandledRejection', r => console.log('[WEBO]', r))
