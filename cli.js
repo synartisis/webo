@@ -7,21 +7,23 @@ const { checkVersion } = require('./lib/utils')
 
 checkVersion()
 
-let [ , ,command, root, ...args ] = process.argv
+const cliParts = process.argv.join('__').split('-')
+
+let [ , ,command, root ] = cliParts[0].split('__').filter(o => !!o)
+let args = cliParts.length > 1 ? cliParts[1].split('__').filter(o => !!o) : []
 if (!command) command = 'dev'
 if (!root) root = '.'
-
-
 
 
 let options = {}
 args = args.join(' ').split('-').filter(o => !!o).map(o => o.trim())
 args.forEach(arg => {
   const [ k, v ] = arg.split(' ')
-  if (k !== undefined && v !== undefined) {
-    options[k] = v
+  if (k !== undefined) {
+    options[k] = v || true
   }
 })
+
 
 if (options.layout) options.config = { layout: options.layout } // HACK
 
@@ -31,14 +33,18 @@ if (options.layout) options.config = { layout: options.layout } // HACK
   state.entryType = entryType
   
 
+  if (options.v) { console.log('version ' + require('./package.json').version); process.exit() }
 
   const started = new Date()
   console.log('==', started.toISOString().split('T')[1], '==')
+
+  state.clientRoot = root
 
   if (['dev', 'build'].includes(command) && entryType === 'express') {
     let expressRoot = await require('./lib/dev/express')(root, command)
     state.serverRoot = root
     root = calcCommonRoot(root, expressRoot)
+    state.clientRoot = expressRoot
   }
   
   if (['dev', 'build'].includes(command)) await init(command, root, options)
