@@ -3,7 +3,9 @@
 const { lstatAsync } = require('./lib/utils')
 
 const { state, init } = require('./lib/state')
-const { checkVersion } = require('./lib/utils')
+const { checkVersion, log } = require('./lib/utils')
+
+const AVAILIABLE_COMMANDS = ['dev', 'build', 'init']
 
 checkVersion()
 
@@ -14,6 +16,7 @@ let args = cliParts.length > 1 ? cliParts[1].split('__').filter(o => !!o) : []
 if (!command) command = 'dev'
 if (!root) root = '.'
 
+if (!AVAILIABLE_COMMANDS.includes(command)) { console.error(`command ${command} does not exist`); process.exit(1) }
   
 let options = {}
 args = args.join(' ').split('-').filter(o => !!o).map(o => o.trim())
@@ -36,7 +39,7 @@ if (options.layout) options.config = { layout: options.layout } // HACK
   if (options.v) { console.log('version ' + require('./package.json').version); process.exit() }
 
   const started = new Date()
-  console.log('==', started.toISOString().split('T')[1], '==')
+  log('_GREEN_WEBO started')
 
   state.clientRoot = root
   
@@ -50,21 +53,16 @@ if (options.layout) options.config = { layout: options.layout } // HACK
   if (['dev', 'build'].includes(command)) await init(command, root, options)
   
 
-  if (['dev', 'build', 'init'].includes(command)) {
-    await require(`./lib/${command}/${command}`)()
-  } else {
-    console.error(`command ${command} does not exist`)
-  }
+  await require(`./lib/${command}/${command}`)()
     
 
   const ended = new Date()
-  console.log('==', ended.toISOString().split('T')[1], '==')
-  console.log('== Time elapsed', (ended.getTime() - started.getTime()) / 1000, 's ==')
+  log('_GREEN_WEBO loaded at', (ended.getTime() - started.getTime()) / 1000 + 's')
 
 })()
 
 
-process.on('unhandledRejection', r => console.log('[WEBO]', r))
+process.on('unhandledRejection', r => log('_RED_[WEBO ERROR]', r))
 
 
 
