@@ -35,11 +35,11 @@ if (options.layout) options.config = { layout: options.layout } // HACK
   if (!entryType) { console.error(`Entry '${root}' is not valid`); process.exit() }
   state.entryType = entryType
   
-
-  if (options.v) { console.log('version ' + require('./package.json').version); process.exit() }
+  const version = require('./package.json').version
+  if (options.v) { console.log('version ' + version); process.exit() }
 
   const started = new Date()
-  log('_GREEN_WEBO started')
+  log(`_GREEN_WEBO ${version} started`)
 
   state.clientRoot = root
   
