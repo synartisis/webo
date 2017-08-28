@@ -62,7 +62,7 @@ if (options.layout) options.config = { layout: options.layout } // HACK
 })()
 
 
-process.on('unhandledRejection', (r, p) => log('_RED_[WEBO ERROR]', r, p.catch(o => console.log(o.stack))))
+process.on('unhandledRejection', (r, p) => p.catch(o => log('_RED_[WEBO ERROR]', o.stack)))
 
 
 
