@@ -54,6 +54,8 @@ if (options.layout) options.config = { layout: options.layout } // HACK
   
 
   await require(`./lib/${command}/${command}`)()
+
+  if (command === 'dev' && entryType === 'express') require('./lib/dev/express').listen()
     
 
   const ended = new Date()
