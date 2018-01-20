@@ -1,0 +1,16 @@
+{
+  "name": "webo-default-template",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4",
+    "body-parser": "^1"
+  },
+  "devDependencies": {
+  }
+}
