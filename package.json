@@ -14,21 +14,21 @@
     "webo": "lib/cli.js"
   },
   "dependencies": {
-    "@babel/core": "^7.0.0-beta.39",
-    "@babel/preset-env": "^7.0.0-beta.39",
-    "babel-minify": "^0.3.0",
+    "@babel/core": "^7.0.0-beta.49",
+    "@babel/preset-env": "^7.0.0-beta.49",
+    "babel-minify": "^0.4.3",
     "babel-polyfill": "^6.26.0",
-    "babel-preset-minify": "^0.3.0",
+    "babel-preset-minify": "^0.4.3",
     "chokidar": "^2.0.3",
     "glob": "^7.1.2",
     "jsdom": "^11.11.0",
-    "mime": "^2.2.0",
-    "postcss": "^6.0.16",
-    "postcss-import": "^11.0.0",
-    "postcss-url": "^7.3.0",
+    "mime": "^2.3.1",
+    "postcss": "^6.0.22",
+    "postcss-import": "^11.1.0",
+    "postcss-url": "^7.3.2",
     "rollup": "^0.54.0",
     "rollup-plugin-node-resolve": "^3.0.2",
-    "ws": "^4.0.0"
+    "ws": "^5.2.0"
   },
   "devDependencies": {}
 }
