@@ -1,6 +1,6 @@
 {
   "name": "webo",
-  "version": "2.0.12",
+  "version": "2.0.13",
   "description": "web development tool",
   "main": "lib/main.js",
   "scripts": {},
