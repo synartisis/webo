@@ -1,23 +1,22 @@
 {
-  "name": "webo-next",
-  "version": "3.0.0",
+  "name": "webo",
+  "version": "3.0.1",
   "description": "",
-  "private": true,
   "main": "webo.js",
   "bin": {
-    "webo-next": "cli.js"
+    "webo": "cli.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://galakos.visualstudio.com/_git/webo-next"
+    "url": "https://github.com/synartisis/webo"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "mime": "^2.4.2",
+    "mime": "^2.4.3",
     "parse5": "^5.1.0",
     "parse5-htmlparser2-tree-adapter": "^5.1.0",
-    "ws": "^6.2.1"
+    "ws": "^7.0.0"
   }
 }
