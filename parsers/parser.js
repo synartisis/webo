@@ -3,14 +3,14 @@ const { calcHash } = require('../lib/utils.js')
 const files = require('./files.js')
 
 
-exports.parse = async function parse(filename, config = {}, { cacheContent } = {}) {
+exports.parse = async function parse(filename, config = {}, { type, cacheContent } = {}) {
 
   const file = files.getFile(filename)
+  if (type && type !== file.type) file.type = type
   if (config.debug && !file.parseCount) file.parseCount = 0
   if (file.content) return file
 
   // console.log('PARSE', filename)
-
   const source = await tryLoadSource(filename.replace('.legacy.', '.'))
   if (!source) return { content: undefined }
 
@@ -18,7 +18,7 @@ exports.parse = async function parse(filename, config = {}, { cacheContent } = {
   const { parse } = require(`./types/${file.type}.js`)
   const { content, deps = {} } = await parse(source, filename, config)
   if (config.debug) file.parseCount ++
-  // console.log('PARSE', { filename, deps })
+  // console.log('PARSED', { filename, type: file.type, deps })
   if (cacheContent) file.content = content
   if (config.cachebust) file.hash = await calcHash(null, content)
   if (!(['js-legacy'].includes(file.type))) files.attachFiles(deps)

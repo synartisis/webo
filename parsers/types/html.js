@@ -35,7 +35,7 @@ exports.parse = async function parse(source, filename, config) {
 
   if (config.cachebust) {
     if (!filename.replace(/\\/g, '/').split('/').pop().startsWith('_')) {
-      await cacheBusting(doc, path.dirname(filename), config)
+      await cacheBusting(doc, path.dirname(filename), config, refs)
     }
   }
 
@@ -105,7 +105,7 @@ async function createLegacyScripts(doc) {
 
 
 
-async function cacheBusting(doc, dir, config) {
+async function cacheBusting(doc, dir, config, htmlRefs) {
   const refs = parse5.qsa(doc, el => [ 'script', 'link', 'img' ].includes(el.name))
   await Promise.all(
     refs.map(async el => {
@@ -115,9 +115,12 @@ async function cacheBusting(doc, dir, config) {
       const attr = 'src' in el.attribs ? 'src' : 'href'
       const uri = el.attribs[attr]
       const ref = uri.split('?')[0]
+      if (ref.startsWith('http://') || ref.startsWith('https://') || ref.startsWith('//')) return
+      const refPath = path.join(dir, ref)
+      const { type } = htmlRefs[refPath] || {}
       if (ref.includes('//') || ref.includes('//')) return
       const ext = ref.split('.').pop()
-      let newRef = ref.substring(0, ref.length - ext.length - 1) + '.' + await cachebust(path.join(dir, ref), config) + '.' + ext
+      let newRef = ref.substring(0, ref.length - ext.length - 1) + '.' + await cachebust(path.join(dir, ref), config, { type }) + '.' + ext
       el.attribs[attr] = newRef
     })
   )
