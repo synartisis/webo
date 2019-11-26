@@ -8,6 +8,7 @@ const { files } = require('../parsers/files.js')
 const { parsable } = require('../webo-settings.js')
 
 const destFilenames = []
+const serverFiles = []
 
 module.exports = async function build(config) {
 
@@ -62,12 +63,15 @@ module.exports = async function build(config) {
 
   // add server files
   await Promise.all(
-    config.serverRoots.map(async srcRoot => srcFiles.push(... await readdirp(srcRoot, { type: 'file' })))
+    config.serverRoots.map(async srcRoot => {
+      serverFiles.push(... await readdirp(srcRoot, { type: 'file' }))
+      srcFiles.push(... serverFiles)
+    })
   )
 
   // copy non parsable files
   await Promise.all(
-    srcFiles.filter(k => !(k in files)).map(async k => {
+    srcFiles.filter(k => serverFiles.includes(k) || !(k in files)).map(async k => {
       const destFilename = resolveDestPath(k, srcRoots, dest)
       return copy(k, destFilename)
     })
@@ -80,7 +84,7 @@ module.exports = async function build(config) {
   // remove extraneous
   await Promise.all(
     destFilenamesOrig.map(async f => {
-      if (!destFilenames.includes(f)) {
+      if (!destFilenames.includes(f) && !serverFiles.includes(f)) {
         log(`_GRAY_remove extraneous ${relativePath(f)}`)
         await unlink(f)
         try {
