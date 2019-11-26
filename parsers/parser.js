@@ -14,7 +14,8 @@ exports.parse = async function parse(filename, config = {}, { type, cacheContent
   const source = await tryLoadSource(filename.replace('.legacy.', '.'))
   if (!source) return { content: undefined }
 
-  if (['dev-dep', 'raw'].includes(file.type)) return { content: source }
+  if (!file.type) file.type = files.detectType(filename, source)
+  if (['dev-dep', 'raw'].includes(file.type)) return { ...file, content: source }
   const { parse } = require(`./types/${file.type}.js`)
   const { content, deps = {} } = await parse(source, filename, config)
   if (config.debug) file.parseCount ++

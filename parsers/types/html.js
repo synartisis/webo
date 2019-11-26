@@ -68,8 +68,12 @@ async function detectRefs(doc, dir) {
   const refs = {}
   await parse5.walk(doc, el => {
     if (el.name === 'script' && 'src' in el.attribs && !el.attribs['src'].includes('//')) {
-      const type = 'nomodule' in el.attribs ? 'js-legacy' : el.attribs['type'] === 'module' ? 'js-module' : 'js-script'
-      refs[path.join(dir, el.attribs['src'].trim().split('?')[0])] = { type }
+      const src = el.attribs['src'].trim().split('?')[0]
+      let type = 'js-script'
+      if ('nomodule' in el.attribs) type = 'js-legacy'
+      if (el.attribs['type'] === 'module') type = 'js-module'
+      if (src.includes('.min.')) type = 'raw'
+      refs[path.join(dir, src)] = { type }
     }
     if (el.name === 'link' && el.attribs['rel'] === 'stylesheet' && !el.attribs['href'].includes('//')) refs[path.join(dir, el.attribs['href'].trim().split('?')[0])] = { type: 'css' }
   })

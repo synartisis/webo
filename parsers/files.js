@@ -13,8 +13,8 @@ exports.getFile = function getFile(filename) {
   const staticContent = static.getFile(filename.replace(/\\/g, '/').split('/').pop())
   if (staticContent) {
     Object.assign(file, { content: staticContent, type: 'raw' })
-  } else {
-    if (!file.type) file.type = getType(filename)
+  // } else {
+    // if (!file.type) file.type = detectType(filename)
   }
 
   return file
@@ -26,12 +26,17 @@ exports.attachFiles = function attachFiles(deps) {
 }
 
 
-function getType(filename) {
+exports.detectType = function detectType(filename, source) {
   if (/\.legacy\.m?js/.test(filename)) return 'js-legacy'
   if (filename.includes('.min.')) return 'raw'
   const ext = filename.split('.').pop()
-  if (ext === 'mjs') return 'js-module'
-  if (ext === 'js') return 'js-script'
   if (['html', 'css', 'vue'].includes(ext)) return ext
+  if (ext === 'mjs') return 'js-module'
+  if (ext === 'js') return detectJsType(source)
   return 'raw'
+}
+
+function detectJsType(source) {
+  if (/(^|\n)\s*\bexport\b/.test(source)) return 'js-module'
+  return 'js-script'
 }
