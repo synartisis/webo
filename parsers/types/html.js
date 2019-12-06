@@ -11,8 +11,15 @@ exports.parse = async function parse(source, filename, config) {
 
   if (config.watchClient) {
     const { port } = require('../../servers/webo-server.js')
-    content = source.replace('</body>', `<script src="//localhost:${port}/webo-socket.js"></script>\n</body>`)
+    // content = source.replace('</body>', `<script src="//localhost:${port}/webo-socket.js"></script>\n</body>`)
+    content = source.replace('</body>', `
+      <script>
+        var weboSocketScript = document.createElement('script');weboSocketScript.src = location.origin.replace(location.port, '${port}') + '/webo-socket.js';
+        document.body.appendChild(weboSocketScript)
+      </script>
+    </body>`)
   }
+  document.write('<a href="' + window.location.protocol + '//' + window.location.hostname + ':8080' + window.location.pathname + '" >Link to same page on port 8080:</a> ' );
 
   const { contentWithPartials, partials } = await includePartials(content, filename)
   if (Object.keys(partials).length) {
