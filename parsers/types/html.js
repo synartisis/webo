@@ -19,7 +19,6 @@ exports.parse = async function parse(source, filename, config) {
       </script>
     </body>`)
   }
-  document.write('<a href="' + window.location.protocol + '//' + window.location.hostname + ':8080' + window.location.pathname + '" >Link to same page on port 8080:</a> ' );
 
   const { contentWithPartials, partials } = await includePartials(content, filename)
   if (Object.keys(partials).length) {
