@@ -32,6 +32,21 @@ fs.readFile = async function readFileWebo(path, options, callback) {
   }
 } 
 
+fsPromises.readFile_ORIG = fsPromises.readFile.bind(fsPromises)
+fsPromises.readFile = async function readFilePromisesWebo(path, options) {
+  if (!parsable(path)) return fsPromises.readFile_ORIG(path, options)
+  // console.log('CALLING readFile PROMISES', path, { options})
+  try {
+    const buffer = await loadFile(path)
+    if (typeof options === 'string' || typeof options.encoding === 'string') {
+      return buffer.toString(options.encoding || options)
+    }
+    return buffer
+  } catch (error) {
+    throw error
+  }
+} 
+
 fs.stat_ORIG = fs.stat.bind(fs)
 fs.stat = function statWebo(path, cb) {
   if (!parsable(path)) return fs.stat_ORIG(path, cb)
@@ -46,6 +61,18 @@ fs.stat = function statWebo(path, cb) {
     }
   })
 
+}
+
+fsPromises.stat_ORIG = fsPromises.stat.bind(fsPromises)
+fsPromises.stat = async function statPromisesWebo(path) {
+  if (!parsable(path)) return fsPromises.stat_ORIG(path)
+  // console.log('CALLING stat PROMISES', path)
+  return new Promise((resolve, reject) => {
+    fs.stat(path, (err, stat) => {
+      if (err) return reject(err)
+      return resolve(stat)
+    })
+  })
 }
 
 const statDefaults = {
