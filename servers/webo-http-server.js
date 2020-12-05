@@ -5,7 +5,7 @@ let weboSocketClient
 
 exports.createHttpServer = function createHttpServer(port) {
   weboSocketClient = fs.readFileSync(__dirname + '/webo-socket.js', 'utf8').replace('[WS_PORT]', port)
-  return http.createServer(requestHandler).listen(port)
+  return http.createServer(requestHandler).listen(port, '127.0.0.1')
 }
 
 
