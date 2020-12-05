@@ -1,4 +1,5 @@
 const fs = require('fs')
+const fsPromises = require('fs/promises')
 const { Readable } = require('stream')
 const { parsable } = require('../webo-settings.js')
 
