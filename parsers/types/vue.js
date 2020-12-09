@@ -4,9 +4,9 @@ exports.parse = async function parse(source, filename, config) {
 
   let result = { content: source }
 
-  const document = parse5.parseFragment(`${source.replace(/template/g, 'tmpl')}`)
+  const document = parse5.parseFragment(`${source.replace(/<template/g, '<vue-template').replace(/<\/template>/g, '<\/vue-template>')}`)
 
-  const templateEl = parse5.qs(document, el => el.name === 'tmpl')
+  const templateEl = parse5.qs(document, el => el.name === 'vue-template')
   const template = templateEl ? parse5.serialize(templateEl) : ''
 
   const scriptEl = parse5.qs(document, el => el.name === 'script')
