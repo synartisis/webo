@@ -125,6 +125,7 @@ async function copy(srcPath, destPath, content) {
 
 function resolveDestPath(srcPath, srcRoots, destRoot) {
   const srcRoot = srcRoots.find(r => srcPath.startsWith(r))
+  if (!srcRoot) return log(`_RED_${srcPath} not found`)
   const relPath = path.relative(srcRoot, srcPath)
   const dirname = srcRoot.replace(/\\/g, '/').split('/').pop()
   return path.join(destRoot, dirname, relPath)
