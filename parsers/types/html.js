@@ -61,7 +61,10 @@ async function includePartials(source, filename) {
     // console.log(match)
     const partialPath = path.join(path.dirname(filename), relPartialPath)
     partials[partialPath] = { type: 'dev-dep' }
-    const partialContent = (await readFile(partialPath)).toString()
+    let partialContent = (await readFile(partialPath)).toString()
+    const partialDoc = parse5.parseFragment(partialContent)
+    const partialDir = path.dirname(relPartialPath)
+    partialContent = await rewritePartials(partialDoc, partialDir)
     const [ before, after ] = contentWithPartials.split(match[0])
     contentWithPartials = [ before, partialContent, after ].join('')
     // console.log(match.groups.path, path.join(path.dirname(filename), match.groups.path))
@@ -134,4 +137,23 @@ async function cacheBusting(doc, dir, config, htmlRefs) {
       el.attribs[attr] = newRef
     })
   )
+}
+
+async function rewritePartials(doc, relPath) {
+  const partialRefs = parse5.qsa(doc, el => [ 'script', 'link', 'img' ].includes(el.name))
+  await Promise.all(
+    partialRefs.map(async el => {
+      if (el.name === 'script' && !el.attribs['src']) return
+      if (el.name === 'link' && el.attribs['rel'] !== 'stylesheet' && !el.attribs['rel'].includes('icon')) return
+      if (el.name === 'img' && !el.attribs['src']) return
+      const attr = 'src' in el.attribs ? 'src' : 'href'
+      const uri = el.attribs[attr]
+      const ref = uri.split('?')[0]
+      if (ref.startsWith('http://') || ref.startsWith('https://') || ref.startsWith('//')) return
+      const refNew = path.join(relPath, ref)
+      el.attribs[attr] = refNew
+      // console.log(el.name, ref, attr, path.join(partialDir, ref))
+    })
+  )    
+  return parse5.serialize(doc)
 }
