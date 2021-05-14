@@ -40,9 +40,9 @@ exports.parse = async function parse(source, filename, config) {
   const refs = await detectRefs(doc, path.dirname(filename))
 
   if (config.cachebust) {
-    if (!filename.replace(/\\/g, '/').split('/').pop().startsWith('_')) {
-      await cacheBusting(doc, path.dirname(filename), config, refs)
-    }
+    // if (!filename.replace(/\\/g, '/').split('/').pop().startsWith('_')) {
+    await cacheBusting(doc, path.dirname(filename), config, refs)
+    // }
   }
 
   return { content: parse5.serialize(doc), deps: { ...partials, ...refs } }
