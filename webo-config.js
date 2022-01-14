@@ -29,11 +29,6 @@ const configOverrides = {
   },
 
   build: {
-    bundle: true,
-    transpile: true,
-    minify: true,
-    legacy: true,
-    cachebust: true,
     output: 'dist/'
   },
 
