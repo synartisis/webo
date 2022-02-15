@@ -1,6 +1,6 @@
 const path = require('path')
 
-const { mkdir, readFile, writeFile, unlink, rmdir } = require('fs').promises
+const { mkdir, readFile, writeFile, unlink, rmdir, copyFile } = require('fs').promises
 const { readdirp } = require('../lib/fs-utils.js')
 const { relativePath } = require('../lib/utils.js')
 const { parse } = require('../parsers/parser.js')
@@ -111,14 +111,20 @@ async function copy(srcPath, destPath, content) {
   if (content) {
     srcBuffer = Buffer.from(content)
   } else {
-    srcBuffer = await readFile(srcPath)
+    try {
+      srcBuffer = await readFile(srcPath)
+    } catch (error) { srcBuffer = Buffer.from('*EMPTY_SRC*') }
   }
   try {
     destBuffer = await readFile(destPath)
-  } catch (error) { destBuffer = Buffer.from('') }
+  } catch (error) { destBuffer = Buffer.from('*EMPTY_DEST*') }
   if (!srcBuffer.equals(destBuffer)) {
     await mkdir(path.dirname(destPath), { recursive: true })
-    await writeFile(destPath, srcBuffer)
+    if (srcBuffer.equals(Buffer.from('*EMPTY_SRC*'))) {
+      await copyFile(srcPath, destPath)
+    } else {
+      await writeFile(destPath, srcBuffer)
+    }
     log(`_GRAY_${relativePath(destPath)}`)
   }
 }
