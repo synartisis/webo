@@ -1,4 +1,4 @@
-const { rollup } = require(require.resolve('rollup', { paths: [ process.cwd() ] }))
+const { rollup } = require('rollup')
 const { parse: parseVue } = require('../types/vue.js')
 const { calcContentHash } = require('../../lib/utils.js')
 
@@ -35,6 +35,19 @@ exports.bundle = async function bundle(filename, { format } = {}, config) {
 
 }
 
+
+exports.getResolvedIds = async function getResolvedIds(filename) {
+  try {
+    const rollupBundle = await rollup({
+      input: filename,
+      onwarn: warning => console.log('ROLLUP', filename, warning),
+    })
+    return rollupBundle.cache.modules.find(o => o.id === filename).resolvedIds
+  } catch (error) {
+    log(`_LIGHTRED_${error}`)
+    return {}
+  }
+}
 
 
 const { readFile } = require('fs').promises
