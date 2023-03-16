@@ -25,7 +25,7 @@ async function cacheBusting(content, filename, config) {
   for await (const match of matches) {
     const ref = match.groups.ref.trim()
     if (!ref) continue
-    const hash = await cachebust(path.join(dir, ref), config)
+    const hash = await cachebust(path.join(dir, ref), config, { referrer: filename })
     const ext = ref.split('.').pop()
     const refFinal = ref.substring(0, ref.length - ext.length) + hash + '.' + ext
     content = content.replaceAll(ref, refFinal)

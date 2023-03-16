@@ -1,12 +1,12 @@
 const { rollup } = require(require.resolve('rollup', { paths: [ process.cwd() ] }))
 const { parse: parseVue } = require('../types/vue.js')
-const { calcHash } = require('../../lib/utils.js')
+const { calcContentHash } = require('../../lib/utils.js')
 
 
 exports.bundle = async function bundle(filename, { format } = {}, config) {
 
   const outputOptions = { format }
-  if (format === 'iife') outputOptions.name = '__BUNDLE_NAME__' //'webo_' + await calcHash(filename)
+  if (format === 'iife') outputOptions.name = '__BUNDLE_NAME__'
   const plugins = [ vuePlugin(config) ]
   
   let rollupBundle
@@ -26,7 +26,7 @@ exports.bundle = async function bundle(filename, { format } = {}, config) {
 
   const { output } = await rollupBundle.generate(outputOptions)
   const { code, modules } = output[0]
-  const bundleName = 'webo_' + await calcHash(null, code)
+  const bundleName = 'webo_' + await calcContentHash(code)
 
   const deps = Object.keys(modules).filter(m => m !== filename)
   .reduce((flat, m) => { flat[m] = { type: 'dev-dep' }; return flat }, {})

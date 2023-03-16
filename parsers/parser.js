@@ -1,5 +1,5 @@
 const { readFile } = require('fs').promises
-const { calcHash } = require('../lib/utils.js')
+const { calcContentHash } = require('../lib/utils.js')
 const files = require('./files.js')
 
 
@@ -21,7 +21,7 @@ exports.parse = async function parse(filename, config = {}, { type, cacheContent
   if (config.debug) file.parseCount ++
   // console.log('PARSED', { filename, type: file.type, deps })
   if (cacheContent) file.content = content
-  if (config.cachebust) file.hash = await calcHash(null, content)
+  if (config.cachebust) file.hash = await calcContentHash(content)
   if (!(['js-legacy'].includes(file.type))) files.attachFiles(deps)
 
   return { content, deps }

@@ -1,7 +1,6 @@
 const path = require('path')
 const { readFile } = require('fs').promises
 const parse5 = require('../utils/parse5.js')
-// const { calcHash } = require('../../lib/utils.js')
 const { cachebust } = require('../utils/cachebuster.js')
 
 exports.parse = async function parse(source, filename, config) {
@@ -40,9 +39,7 @@ exports.parse = async function parse(source, filename, config) {
   const refs = await detectRefs(doc, path.dirname(filename))
 
   if (config.cachebust) {
-    // if (!filename.replace(/\\/g, '/').split('/').pop().startsWith('_')) {
-    await cacheBusting(doc, path.dirname(filename), config, refs)
-    // }
+    await cacheBusting(doc, filename, config, refs)
   }
 
   return { content: parse5.serialize(doc), deps: { ...partials, ...refs } }
@@ -118,7 +115,8 @@ async function createLegacyScripts(doc) {
 
 
 
-async function cacheBusting(doc, dir, config, htmlRefs) {
+async function cacheBusting(doc, filename, config, htmlRefs) {
+  const dir = path.dirname(filename)
   const refs = parse5.qsa(doc, el => [ 'script', 'link', 'img' ].includes(el.name))
   await Promise.all(
     refs.map(async el => {
@@ -133,7 +131,7 @@ async function cacheBusting(doc, dir, config, htmlRefs) {
       const { type } = htmlRefs[refPath] || {}
       if (ref.includes('//') || ref.includes('//')) return
       const ext = ref.split('.').pop()
-      let newRef = ref.substring(0, ref.length - ext.length - 1) + '.' + await cachebust(path.join(dir, ref), config, { type }) + '.' + ext
+      let newRef = ref.substring(0, ref.length - ext.length - 1) + '.' + await cachebust(path.join(dir, ref), config, { type, referrer: filename }) + '.' + ext
       el.attribs[attr] = newRef
     })
   )
