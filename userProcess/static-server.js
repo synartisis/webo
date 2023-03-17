@@ -1,11 +1,11 @@
-const http = require('http')
-const path = require('path')
-const fs = require('fs')
-const { stat } = require('fs').promises
-const mime = require('mime')
+import http from 'node:http'
+import path from 'node:path'
+import fs from 'node:fs'
+import { stat } from 'node:fs/promises'
+import mime from 'mime'
 
 
-exports.createStaticServer = function createStaticServer() {
+export function createStaticServer() {
   return http.createServer(staticRequestHandler).listen(3000, () => console.log('listening 3000'))
 }
 

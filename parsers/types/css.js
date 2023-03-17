@@ -1,7 +1,7 @@
-const path = require('path')
-const { cachebust } = require('../utils/cachebuster.js')
+import path from 'node:path'
+import { cachebust } from '../utils/cachebuster.js'
 
-exports.parse = async function parse(source, filename, config) {
+export async function parse(source, filename, config) {
 
   let content = source
 

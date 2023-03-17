@@ -1,9 +1,10 @@
-const { rollup } = require('rollup')
-const { parse: parseVue } = require('../types/vue.js')
-const { calcContentHash } = require('../../lib/utils.js')
+import fs from 'node:fs/promises'
+import { rollup } from 'rollup'
+import { parse as parseVue } from '../types/vue.js'
+import { calcContentHash } from '../../lib/utils.js'
 
 
-exports.bundle = async function bundle(filename, { format } = {}, config) {
+export async function bundle(filename, { format } = {}, config) {
 
   const outputOptions = { format }
   if (format === 'iife') outputOptions.name = '__BUNDLE_NAME__'
@@ -36,7 +37,7 @@ exports.bundle = async function bundle(filename, { format } = {}, config) {
 }
 
 
-exports.getResolvedIds = async function getResolvedIds(filename) {
+export async function getResolvedIds(filename) {
   try {
     const rollupBundle = await rollup({
       input: filename,
@@ -50,12 +51,11 @@ exports.getResolvedIds = async function getResolvedIds(filename) {
 }
 
 
-const { readFile } = require('fs').promises
 function vuePlugin(config) {
   return {
     async load(id) {
       if (!(id.endsWith('.vue'))) return undefined
-      const source = (await readFile(id)).toString()
+      const source = await fs.readFile(id, 'utf8')
       let { content } = await parseVue(source, id, config)
       return content
     }

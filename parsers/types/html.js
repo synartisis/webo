@@ -1,15 +1,15 @@
-const path = require('path')
-const { readFile } = require('fs').promises
-const parse5 = require('../utils/parse5.js')
-const { cachebust } = require('../utils/cachebuster.js')
+import path from 'node:path'
+import fs from 'node:fs/promises'
+import * as parse5 from '../utils/parse5.js'
+import { cachebust } from '../utils/cachebuster.js'
+import { port } from '../../servers/webo-server.js'
 
-exports.parse = async function parse(source, filename, config) {
+export async function parse(source, filename, config) {
 
   let content = source
   let deps = {}
 
   if (config.watchClient) {
-    const { port } = require('../../servers/webo-server.js')
     // content = source.replace('</body>', `<script src="//localhost:${port}/webo-socket.js"></script>\n</body>`)
     content = source.replace('</body>', `
       <script>
@@ -58,7 +58,7 @@ async function includePartials(source, filename) {
     // console.log(match)
     const partialPath = path.join(path.dirname(filename), relPartialPath)
     partials[partialPath] = { type: 'dev-dep' }
-    let partialContent = (await readFile(partialPath)).toString()
+    let partialContent = (await fs.readFile(partialPath)).toString()
     const partialDoc = parse5.parseFragment(partialContent)
     const partialDir = path.dirname(relPartialPath)
     partialContent = await rewritePartials(partialDoc, partialDir)

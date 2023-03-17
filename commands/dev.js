@@ -1,16 +1,15 @@
-const path = require('path')
+import path from 'node:path'
+import { createUserProcess } from '../lib/process-manager.js'
+import { watchServer, watchClient } from '../lib/watchers.js'
+import { createWeboServer } from '../servers/webo-server.js'
 
-const { createUserProcess } = require('../lib/process-manager.js')
-const { watchServer, watchClient } = require('../lib/watchers.js')
-
-module.exports = async function dev(config, nodeArgs) {
+export default async function dev(config, nodeArgs) {
 
   const userEntryPath = path.resolve(config.userEntry)
   const userEntryUrl = new URL(`file:///${userEntryPath}`).href
   createUserProcess(userEntryUrl, nodeArgs, config)
 
   if (config.watchClient) {
-    const { createWeboServer } = require('../servers/webo-server.js')
     createWeboServer()
     watchClient(config.clientRoots, config.cachebust)
   }

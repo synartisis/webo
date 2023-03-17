@@ -1,6 +1,8 @@
-const parse5 = require('../utils/parse5.js')
+import * as parse5 from '../utils/parse5.js'
+import { transpile } from '../utils/transpiler.js'
+import { minify } from '../utils/minifier.js'
 
-exports.parse = async function parse(source, filename, config) {
+export async function parse(source, filename, config) {
 
   let result = { content: source }
 
@@ -15,13 +17,11 @@ exports.parse = async function parse(source, filename, config) {
   result.content = script.replace('export default {', `export default {\n  template: \`${template}\`,\n  `)
 
   if (config.transpile) {
-    const { transpile } = require('../utils/transpiler.js')
     const transpileResult = await transpile(result.content, { presetName: 'transpileModern' })
     Object.assign(result, transpileResult)
   }
 
   if (config.minify) {
-    const { minify } = require('../utils/minifier.js')
     const minifyResult = await minify(result.content)
     Object.assign(result, minifyResult)
   }

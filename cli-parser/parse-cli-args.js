@@ -1,4 +1,4 @@
-exports.parseCliArgs = function parseCliArgs() {
+export function parseCliArgs() {
 
   const [ weboArgsString, nodeArgs ] = process.argv.splice(2).join(' ').split(' -- ')
   const userCommandAndEntry = weboArgsString.split('-')[0]

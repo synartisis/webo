@@ -35,6 +35,6 @@ const configOverrides = {
 }
 
 
-exports.getConfig = function getConfig(command) {
+export function getConfig(command) {
   return Object.assign(baseConfig, { command }, configOverrides[command])
 }

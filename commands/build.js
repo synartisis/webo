@@ -1,23 +1,23 @@
-const path = require('path')
+import path from 'node:path'
 
-const { mkdir, readFile, writeFile, unlink, rmdir, copyFile } = require('fs').promises
-const { readdirp } = require('../lib/fs-utils.js')
-const { relativePath } = require('../lib/utils.js')
-const { parse } = require('../parsers/parser.js')
-const { files } = require('../parsers/files.js')
-const { parsable } = require('../webo-settings.js')
+import fs from'fs/promises'
+import { readdirp } from'../lib/fs-utils.js'
+import { relativePath } from'../lib/utils.js'
+import { parse } from'../parsers/parser.js'
+import { files } from'../parsers/files.js'
+import { parsable } from'../webo-settings.js'
 
 const destFilenames = []
 const serverFiles = []
 
-module.exports = async function build(config) {
+export default async function build(config) {
 
   if (!config.output) return { exitCode: 1, message: 'output is not defined' }
   if (!config.serverRoots.length) return { exitCode: 1, message: 'serverRoots not defined' }
   if (!config.clientRoots.length) return { exitCode: 1, message: 'clientRoots not defined' }
 
   const dest = path.resolve(config.output)
-  await mkdir(dest, { recursive: true })
+  await fs.mkdir(dest, { recursive: true })
   const srcRoots = [ ...config.serverRoots, ...config.clientRoots ]
   const destFilenamesOrig = await readdirp(dest, { type: 'file' })
 
@@ -86,11 +86,11 @@ module.exports = async function build(config) {
     destFilenamesOrig.map(async f => {
       if (!destFilenames.includes(f) && !serverFiles.includes(f)) {
         log(`_GRAY_remove extraneous ${relativePath(f)}`)
-        await unlink(f)
+        await fs.unlink(f)
         try {
           const dir = path.dirname(f)
           if ((await readdirp(dir, { type: 'file' })).length === 0) {
-            await rmdir(dir)
+            await fs.rmdir(dir)
             log(`_GRAY_remove empty dir ${relativePath(dir)}`)
           }
         } catch (error) {}
@@ -112,18 +112,18 @@ async function copy(srcPath, destPath, content) {
     srcBuffer = Buffer.from(content)
   } else {
     try {
-      srcBuffer = await readFile(srcPath)
+      srcBuffer = await fs.readFile(srcPath)
     } catch (error) { srcBuffer = Buffer.from('*EMPTY_SRC*') }
   }
   try {
-    destBuffer = await readFile(destPath)
+    destBuffer = await fs.readFile(destPath)
   } catch (error) { destBuffer = Buffer.from('*EMPTY_DEST*') }
   if (!srcBuffer.equals(destBuffer)) {
-    await mkdir(path.dirname(destPath), { recursive: true })
+    await fs.mkdir(path.dirname(destPath), { recursive: true })
     if (srcBuffer.equals(Buffer.from('*EMPTY_SRC*'))) {
-      await copyFile(srcPath, destPath)
+      await fs.copyFile(srcPath, destPath)
     } else {
-      await writeFile(destPath, srcBuffer)
+      await fs.writeFile(destPath, srcBuffer)
     }
     log(`_GRAY_${relativePath(destPath)}`)
   }

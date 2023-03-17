@@ -1,9 +1,10 @@
-const fs = require('fs')
-const http = require('http')
+import fs from 'node:fs'
+import http from 'node:http'
 
+const __dirname = new URL('.', import.meta.url).pathname
 let weboSocketClient
 
-exports.createHttpServer = function createHttpServer(port) {
+export function createHttpServer(port) {
   weboSocketClient = fs.readFileSync(__dirname + '/webo-socket.js', 'utf8').replace('[WS_PORT]', port)
   return http.createServer(requestHandler).listen(port, '127.0.0.1')
 }

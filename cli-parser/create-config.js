@@ -1,8 +1,8 @@
-const { getConfig } = require('../webo-config.js')
-const { weboFlags } = require('./webo-flags.js')
+import { getConfig } from '../webo-config.js'
+import { weboFlags } from './webo-flags.js'
 
 
-exports.createConfig = function createConfig({ command, userEntry, weboArgs }) {
+export function createConfig({ command, userEntry, weboArgs }) {
   const defaultConfig = getConfig(command)
   const config = Object.assign({}, defaultConfig, {
     userEntry,

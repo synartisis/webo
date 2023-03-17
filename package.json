@@ -1,8 +1,9 @@
 {
   "name": "webo",
-  "version": "3.3.1",
-  "description": "",
-  "main": "webo.js",
+  "version": "4.0.0",
+  "type": "module",
+  "description": "a development tool for the web",
+  "import": "webo.js",
   "bin": {
     "webo": "cli.js"
   },

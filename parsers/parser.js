@@ -1,9 +1,9 @@
-const { readFile } = require('fs').promises
-const { calcContentHash } = require('../lib/utils.js')
-const files = require('./files.js')
+import fs from 'node:fs/promises'
+import { calcContentHash } from '../lib/utils.js'
+import * as files from './files.js'
 
 
-exports.parse = async function parse(filename, config = {}, { type, cacheContent } = {}) {
+export async function parse(filename, config = {}, { type, cacheContent } = {}) {
 
   const file = files.getFile(filename)
   if (type && type !== file.type) file.type = type
@@ -16,7 +16,7 @@ exports.parse = async function parse(filename, config = {}, { type, cacheContent
 
   if (!file.type) file.type = files.detectType(filename, source)
   if (['dev-dep', 'raw'].includes(file.type)) return { ...file, content: source }
-  const { parse } = require(`./types/${file.type}.js`)
+  const { parse } = await import(`./types/${file.type}.js`)
   const { content, deps = {} } = await parse(source, filename, config)
   if (config.debug) file.parseCount ++
   // console.log('PARSED', { filename, type: file.type, deps })
@@ -32,7 +32,7 @@ exports.parse = async function parse(filename, config = {}, { type, cacheContent
 
 async function tryLoadSource(filename) {
   try {
-    return await readFile(filename, 'utf8')
+    return await fs.readFile(filename, 'utf8')
   } catch (error) {
     return null
   }

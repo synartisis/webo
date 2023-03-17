@@ -1,7 +1,7 @@
-const fs = require('fs')
-const fsPromises = require('fs/promises')
-const { Readable } = require('stream')
-const { parsable } = require('../webo-settings.js')
+import fs from 'node:fs'
+import fsPromises from 'node:fs/promises'
+import { Readable } from 'node:stream'
+import { parsable } from '../webo-settings.js'
 
 fs.createReadStream_ORIG = fs.createReadStream.bind(fs)
 fs.createReadStream = function createReadStreamWebo(path, options = {}) {

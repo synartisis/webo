@@ -1,12 +1,15 @@
-const { cachebust } = require('../utils/cachebuster.js')
+import { bundle } from '../utils/bundler.js'
+import { transpile } from '../utils/transpiler.js'
+import { minify } from '../utils/minifier.js'
+import { cachebust } from '../utils/cachebuster.js'
+import { getResolvedIds } from '../utils/bundler.js'
 
-exports.parse = async function parse(source, filename, config) {
+export async function parse(source, filename, config) {
 
   // console.log('MODULE', filename)
   let result = { content: source }
 
   if (config.bundle) {
-    const { bundle } = require('../utils/bundler.js')
     const bundleResult = await bundle(filename, { format: 'esm' }, config)
     Object.assign(result, bundleResult)
   }
@@ -18,13 +21,11 @@ exports.parse = async function parse(source, filename, config) {
 
 
   if (config.transpile) {
-    const { transpile } = require('../utils/transpiler.js')
     const transpileResult = await transpile(result.content, { presetName: 'transpileModern' })
     Object.assign(result, transpileResult)
   }
 
   if (config.minify) {
-    const { minify } = require('../utils/minifier.js')
     const minifyResult = await minify(result.content)
     Object.assign(result, minifyResult)
   }
@@ -35,7 +36,6 @@ exports.parse = async function parse(source, filename, config) {
 
 
 async function cachebustDeps(filename, source) {
-  const { getResolvedIds } = require('../utils/bundler.js')
   const resolvedIds = await getResolvedIds(filename)
 
   let content = source

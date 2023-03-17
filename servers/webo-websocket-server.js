@@ -1,7 +1,7 @@
-const WebSocket = require('ws')
+import WebSocket from 'ws'
 
 
-exports.createWebSocketServer = function createWebSocketServer(server) {
+export function createWebSocketServer(server) {
 
   const wsServer = new WebSocket.Server({ server })
   const webSockets = new Set

@@ -1,8 +1,8 @@
-exports.commandsAllowed = [ 'dev', 'build', 'config' ]
+export const commandsAllowed = [ 'dev', 'build', 'config' ]
 
 const extensionsSupported = ['html', 'css', 'js', 'mjs', 'vue']
 
-exports.parsable = function parsable(path) {
+export function parsable(path) {
   const filename = path.replace(/\\/g, '/').split('/').pop()
   const ext = filename.split('.').pop()
   // if (filename.includes('.min.')) return false

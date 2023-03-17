@@ -1,10 +1,10 @@
-const path = require('path')
-const { parse } = require('../parser.js')
-const { getFile } = require('../files.js')
-const { calcFilenameHash, calcContentHash } = require('../../lib/utils.js')
-const { parsable } = require('../../webo-settings.js')
+import path from 'node:path'
+import { parse } from '../parser.js'
+import { getFile } from '../files.js'
+import { calcFilenameHash, calcContentHash } from '../../lib/utils.js'
+import { parsable } from '../../webo-settings.js'
 
-exports.cachebust = async function cachebust(filename, config, { type, referrer } = {}) {
+export async function cachebust(filename, config, { type, referrer } = {}) {
   if (!parsable(filename)) {
     try {
       return await calcFilenameHash(filename)

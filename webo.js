@@ -1,20 +1,24 @@
-const path = require('path')
-const { setGlobals } = require('./lib/utils.js')
-const { detectProjectType } = require('./lib/detect-project-type.js')
+import path from 'node:path'
+import { setGlobals } from './lib/utils.js'
+import { detectProjectType } from './lib/detect-project-type.js'
+import { version } from './commands/config.js'
+import { detectRoots } from './lib/detect-roots.js'
+import dev from './commands/dev.js'
+import build from './commands/build.js'
+import configCommand from './commands/config.js'
 
-exports.webo = async function webo(config, nodeArgs) {
+export async function webo(config, nodeArgs) {
 
   setGlobals(config.verbose)
 
   if (['dev', 'build'].includes(config.command)) {
-    log(`_GREEN_WEBO ${require('./package.json').version} started`)
+    log(`_GREEN_WEBO ${version} started`)
   }
 
   config.projectType = await detectProjectType(config)
   if (config.projectType === 'static' && !config.clientRoots.length) config.clientRoots = [ path.resolve(config.userEntry) ] 
 
   if (config.serverRoots.length === 0 && config.clientRoots.length === 0) {
-    const { detectRoots } = require('./lib/detect-roots.js')
     Object.assign(config, await detectRoots(config.userEntry))
   }
 
@@ -23,15 +27,15 @@ exports.webo = async function webo(config, nodeArgs) {
   let result
 
   if (config.command === 'config') {
-    result = await require('./commands/config.js')(config, nodeArgs)
+    result = await configCommand(config, nodeArgs)
   }
 
   if (config.command === 'dev') {
-    result = await require('./commands/dev.js')(config, nodeArgs)
+    result = await dev(config, nodeArgs)
   }
 
   if (config.command === 'build') {
-    result = await require('./commands/build.js')(config)
+    result = await build(config)
   }
 
 

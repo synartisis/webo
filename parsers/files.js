@@ -1,16 +1,16 @@
-const static = require('./static/static.js')
+import * as staticFiles from './static/static.js'
 
-const files = exports.files = {}
+export const files = {}
 
 
-exports.getFile = function getFile(filename) {
+export function getFile(filename) {
   let file = files[filename]
   if (!file) {
     file = files[filename] = {}
   }
   if (file.content) return file
 
-  const staticContent = static.getFile(filename.replace(/\\/g, '/').split('/').pop())
+  const staticContent = staticFiles.getFile(filename.replace(/\\/g, '/').split('/').pop())
   if (staticContent) {
     Object.assign(file, { content: staticContent, type: 'raw' })
   // } else {
@@ -21,12 +21,12 @@ exports.getFile = function getFile(filename) {
 }
 
 
-exports.attachFiles = function attachFiles(deps) {
+export function attachFiles(deps) {
   Object.keys(deps).filter(k => !files[k]).forEach(k => files[k] = deps[k])
 }
 
 
-exports.detectType = function detectType(filename, source) {
+export function detectType(filename, source) {
   if (/\.legacy\.m?js/.test(filename)) return 'js-legacy'
   if (filename.includes('.min.')) return 'raw'
   const ext = filename.split('.').pop()

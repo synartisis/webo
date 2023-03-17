@@ -1,13 +1,14 @@
-const { parseCliArgs } = require('./parse-cli-args.js')
-const { weboFlags } = require('./webo-flags.js')
-const { commandsAllowed } = require('../webo-settings.js')
-const { createConfig } = require('./create-config.js')
+import { parseCliArgs } from './parse-cli-args.js'
+import { weboFlags } from './webo-flags.js'
+import { commandsAllowed } from '../webo-settings.js'
+import { createConfig } from './create-config.js'
+import { version } from '../commands/config.js'
 
-exports.cliParser = function cliParser() {
+export function cliParser() {
 
   const { command, userEntry, weboArgs, nodeArgs } = parseCliArgs()
 
-  if (weboArgs.v || weboArgs.version) return { exitCode: 0, message: 'v' + require('../package.json').version }
+  if (weboArgs.v || weboArgs.version) return { exitCode: 0, message: 'v' + version }
 
   const validationError = validateArgs(command, userEntry, weboArgs)
   if (validationError) return { exitCode: 1, message: validationError }

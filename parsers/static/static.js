@@ -1,9 +1,10 @@
-const fs = require('fs')
+import fs from 'node:fs'
 
+const __dirname = new URL('.', import.meta.url).pathname
 let staticFiles
 
 
-exports.getFile = function getFile(filename) {
+export function getFile(filename) {
   if (!staticFiles) load()
   return staticFiles[filename]
 }

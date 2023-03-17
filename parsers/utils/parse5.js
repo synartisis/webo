@@ -1,22 +1,22 @@
-const parse5 = require('parse5')
-const htmlparser2Adapter = require('parse5-htmlparser2-tree-adapter')
+import * as parse5 from 'parse5'
+import * as htmlparser2Adapter from 'parse5-htmlparser2-tree-adapter'
 
 
-exports.parseHtml = function parse(html) {
+export function parseHtml(html) {
   return parse5.parse(html, { treeAdapter: htmlparser2Adapter })
 }
 
 
-exports.parseFragment = function parseFragment(html) {
+export function parseFragment(html) {
   return parse5.parseFragment(html, { treeAdapter: htmlparser2Adapter })
 }
 
 
-exports.serialize = function serialize(document) {
+export function serialize(document) {
   return parse5.serialize(document, { treeAdapter: htmlparser2Adapter })
 }
 
-exports.qs = function qs(node, predicate) {
+export function qs(node, predicate) {
   let result
   if (predicate(node)) {
     result = node
@@ -32,20 +32,20 @@ exports.qs = function qs(node, predicate) {
 }
 
 
-exports.qsa = function qsa(node, predicate, res = []) {
+export function qsa(node, predicate, res = []) {
   if (predicate(node)) res.push(node)
   if (node.children) node.children.forEach(child => qsa(child, predicate, res))
   return res
 }
 
 
-exports.walk = function walk(node, fn) {
+export function walk(node, fn) {
   fn(node)
   if (node.children) node.children.forEach(child => walk(child, fn))
 }
 
 
-exports.createElement = function createElement(type, attributes = {}) {
+export function createElement(type, attributes = {}) {
   return { 
     type, 
     name: type,
@@ -61,7 +61,7 @@ exports.createElement = function createElement(type, attributes = {}) {
 }
 
 
-exports.insertBefore = function insertBefore(newChild, refChild) {
+export function insertBefore(newChild, refChild) {
   if (!newChild || !refChild) throw new Error('missing parameter')
   newChild.parent = refChild.parent
   refChild.parent.children.splice(refChild.parent.children.indexOf(refChild), 0, newChild)
@@ -72,7 +72,7 @@ exports.insertBefore = function insertBefore(newChild, refChild) {
 }
 
 
-exports.remove = function remove(el) {
+export function remove(el) {
   if (!el) throw new Error('missing parameter')
   el.parent.children.splice(el.parent.children.indexOf(el), 1)
   if (el.prev) el.prev.next = el.next

@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
-const { cliParser } = require('./cli-parser/cli-parser.js')
-const { webo } = require('./webo.js')
+import { cliParser } from './cli-parser/cli-parser.js'
+import { webo } from './webo.js'
 
 const { config, nodeArgs, exitCode, message } = cliParser()
 
