@@ -1,6 +1,8 @@
+import { createRequire } from 'node:module'
 import { getConfig } from '../webo-config.js'
 import { weboFlags } from './webo-flags.js'
 
+const require = createRequire(import.meta.url)
 
 export function createConfig({ command, userEntry, weboArgs }) {
   const defaultConfig = getConfig(command)
@@ -24,7 +26,7 @@ export function createConfig({ command, userEntry, weboArgs }) {
 function validateConfig(config) {
   let result = ''
 
-  if (config.bundle) result += checkForMissingDeps('rollup', '--bundle')
+  // if (config.bundle) result += checkForMissingDeps('rollup', '--bundle')
   if (config.transpile || config.legacy) {
     result += checkForMissingDeps('@babel/core', '--transpile')
     result += checkForMissingDeps('@babel/preset-env', '--transpile')
