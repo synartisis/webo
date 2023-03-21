@@ -1,6 +1,6 @@
 {
   "name": "webo",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "type": "module",
   "description": "a development tool for the web",
   "import": "webo.js",
