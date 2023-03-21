@@ -25,6 +25,7 @@ async function cacheBusting(content, filename, config) {
   for await (const match of matches) {
     const ref = match.groups.ref.trim().replaceAll("'", '').replaceAll('"', '').split('?')[0].split('#')[0]
     if (!ref) continue
+    if (ref.startsWith('http://') || ref.startsWith('https://') || ref.startsWith('/')) continue
     const ext = ref.split('.').pop()
     const hash = await cachebust(path.join(dir, ref), config, { referrer: filename, ignoreIfMissing: ignoreIfMissing(ext) })
     const refFinal = [ref.substring(0, ref.length - ext.length - 1), hash, ext].filter(Boolean).join('.')
