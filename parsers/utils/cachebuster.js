@@ -4,12 +4,15 @@ import { getFile } from '../files.js'
 import { calcFilenameHash, calcContentHash } from '../../lib/utils.js'
 import { parsable } from '../../webo-settings.js'
 
-export async function cachebust(filename, config, { type, referrer } = {}) {
+export async function cachebust(filename, config, { type, referrer, ignoreIfMissing } = {}) {
   if (!parsable(filename)) {
     try {
       return await calcFilenameHash(filename)
     } catch (error) {
-      throw new Error(`cannot find ${path.relative('.', filename)} referred by ${path.relative('.', referrer)}`, { error })
+      if (!ignoreIfMissing) {
+        throw new Error(`cannot find ${path.relative('.', filename)} referred by ${path.relative('.', referrer)}`, { error })
+      }
+      return null
     }
   }
   const file = getFile(filename)

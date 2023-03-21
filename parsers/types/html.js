@@ -131,7 +131,8 @@ async function cacheBusting(doc, filename, config, htmlRefs) {
       const { type } = htmlRefs[refPath] || {}
       if (ref.includes('//') || ref.includes('//')) return
       const ext = ref.split('.').pop()
-      let newRef = ref.substring(0, ref.length - ext.length - 1) + '.' + await cachebust(path.join(dir, ref), config, { type, referrer: filename }) + '.' + ext
+      const hash = await cachebust(path.join(dir, ref), config, { type, referrer: filename })
+      let newRef = [ref.substring(0, ref.length - ext.length - 1), hash, ext].filter(Boolean).join('.')
       el.attribs[attr] = newRef
     })
   )
