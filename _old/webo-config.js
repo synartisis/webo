@@ -32,9 +32,13 @@ const configOverrides = {
     output: 'dist/'
   },
 
+  config: {
+  },
+
 }
 
 
+/** @type {(commant: Webo.Command) => Webo.Config} */
 export function getConfig(command) {
-  return Object.assign(baseConfig, { command }, configOverrides[command])
+  return { ...baseConfig, command, ...configOverrides[command] }
 }

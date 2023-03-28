@@ -1,20 +1,14 @@
 #! /usr/bin/env node
 
-import { cliParser } from './cli-parser/cli-parser.js'
-import { webo } from './webo.js'
+import { createConfig } from './lib/config.js'
+import { webo } from './lib/webo.js'
 
-const { config, nodeArgs, exitCode, message } = cliParser()
+const { config, nodeArgs } = createConfig()
 
-if (exitCode != null) {
-  exitCode === 0 ? console.log(message) : console.error(message)
-  process.exit(exitCode)
-}
+const weboResult = await webo(config, nodeArgs)
+// console.debug(weboResult)
 
-webo(config, nodeArgs)
-.then(weboResult => {
-  if (weboResult) console.dir(weboResult)
-})
+process.exit(weboResult.exitCode)
 
-
-process.on('unhandledRejection', r => { config.verbose ? logv(`\r_LIGHTRED_${r.stack ?? r}`) : log(`\r_LIGHTRED_${r}`); process.exit(1) })
-process.on('SIGINT', () => { log('\r_GREEN_webo ended by user'); process.exit(1) })
+// @ts-ignore
+// process.on('unhandledRejection', r => { config.verbose ? logv(`\r_LIGHTRED_${r.stack ?? r}`) : log(`\r_LIGHTRED_${r}`); process.exit(1); })

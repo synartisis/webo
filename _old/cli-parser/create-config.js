@@ -4,11 +4,10 @@ import { weboFlags } from './webo-flags.js'
 
 const require = createRequire(import.meta.url)
 
+/** @type {(configOptions: { command: Webo.Command, userEntry: string, weboArgs: any }) => Webo.Config} */
 export function createConfig({ command, userEntry, weboArgs }) {
   const defaultConfig = getConfig(command)
-  const config = Object.assign({}, defaultConfig, {
-    userEntry,
-  })
+  const config = { ...defaultConfig, userEntry }
 
   // apply weboArgs to config
   Object.keys(weboArgs).forEach(weboArg => weboFlags(config)[weboArg] = weboArgs[weboArg])
@@ -18,11 +17,12 @@ export function createConfig({ command, userEntry, weboArgs }) {
     process.exit(1)
   }
 
-  // console.log({ cliArgs: { command, userEntry, weboArgs, nodeArgs }, config })
+  // console.debug({ cliArgs: { command, userEntry, weboArgs, nodeArgs }, config })
   return config
 }
 
 
+/** @type {(config: Webo.Config) => string} */
 function validateConfig(config) {
   let result = ''
 
@@ -37,6 +37,7 @@ function validateConfig(config) {
   return result
 }
 
+/** @type {(moduleName: string, switchName: string) => string} */
 function checkForMissingDeps(moduleName, switchName) {
   try {
     require.resolve(moduleName, { paths: [ process.cwd() ] })

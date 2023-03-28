@@ -1,6 +1,8 @@
+// @ts-nocheck
 import path from 'node:path'
 
-export function weboFlags (config) {
+/** @type {(config?: Webo.Config) => any} */
+export function weboFlags(config) {
   return {
 
     set 'server-root'(val) { config.serverRoots.push(...Array.isArray(val) ? val.map(o => path.resolve(o)) : [ path.resolve(val) ]) },

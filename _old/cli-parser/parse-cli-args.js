@@ -3,6 +3,7 @@ export function parseCliArgs() {
   const [ weboArgsString, nodeArgs ] = process.argv.splice(2).join(' ').split(' -- ')
   const userCommandAndEntry = weboArgsString.split('-')[0]
   const [ command, userEntry ] = userCommandAndEntry.split(' ')
+  /** @type {any} */
   const options = {}
   if (weboArgsString.includes(userCommandAndEntry + '-')) {
     weboArgsString.replace(userCommandAndEntry + '-', '-').split(' -').filter(Boolean).forEach(arg => {
