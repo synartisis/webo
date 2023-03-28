@@ -8,7 +8,7 @@ declare global {
 
     type Command = 'dev' | 'build' | 'config'
     type ProjectTypes = 'static' | 'user'
-    type FileTypes = 'html' | 'css' | 'js-module' | 'js-script' | 'js-legacy' | 'vue' | 'raw'
+    type FileTypes = 'html' | 'css' | 'js-module' | 'js-script' | 'js-legacy' | 'vue' | 'raw' | 'dev-dep'
   
     interface Config {
       version: string
@@ -37,11 +37,15 @@ declare global {
     }
 
     interface File {
-      type: FileTypes,
+      type: FileTypes | null,
       content?: string,
-      deps: string[],
-      hash: string,
+      deps: FileDeps,
+      hash?: string,
       parseCount: number,
+    }
+
+    interface FileDeps {
+      [filename: string]: { type: FileTypes }
     }
 
   }
