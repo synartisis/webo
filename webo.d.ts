@@ -8,6 +8,7 @@ declare global {
 
     type Command = 'dev' | 'build' | 'config'
     type ProjectTypes = 'static' | 'user'
+    type FileTypes = 'html' | 'css' | 'js-module' | 'js-script' | 'js-legacy' | 'vue' | 'raw'
   
     interface Config {
       version: string
@@ -33,6 +34,14 @@ declare global {
     interface CommandResult {
       exitCode: number,
       message: string,
+    }
+
+    interface File {
+      type: FileTypes,
+      content?: string,
+      deps: string[],
+      hash: string,
+      parseCount: number,
     }
 
   }
