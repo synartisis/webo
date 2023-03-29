@@ -1,6 +1,6 @@
 import { parseCliArgs } from './parse-cli-args.js'
 import { weboFlags } from './webo-flags.js'
-import { commandsAllowed } from '../webo-settings.js'
+import { commandsAllowed } from '../../lib/utils/utils.js'
 import { createConfig } from './create-config.js'
 import { version } from '../commands/config.js'
 
