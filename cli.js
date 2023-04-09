@@ -6,7 +6,7 @@ import { webo } from './lib/webo.js'
 const { config, nodeArgs } = createConfig()
 
 const weboResult = await webo(config, nodeArgs)
-// console.debug(weboResult)
+if (weboResult.exitCode !== 0) log(`_RED_ERROR: ${weboResult.message}`)
 
 process.exit(weboResult.exitCode)
 
