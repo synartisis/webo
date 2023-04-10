@@ -1,8 +1,7 @@
 # to do
+syn-html-parser
 img: add width and height
-css parser
 
 
 # for thought
-init command?
 inline scripts process?
