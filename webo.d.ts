@@ -6,7 +6,7 @@ declare global {
 
   namespace Webo {
 
-    type Command = 'dev' | 'build' | 'config' | 'deploy'
+    type Command = 'dev' | 'build' | 'config' | 'deploy' | 'init'
     type ProjectTypes = 'static' | 'user'
     type FileTypes = 'html' | 'css' | 'js-module' | 'js-script' | 'js-legacy' | 'vue' | 'raw' | 'dev-dep'
   
@@ -26,6 +26,7 @@ declare global {
       output: string,
       deployTo: string,
       service: string,
+      template: string
       verbose: boolean,
   
       projectType?: ProjectTypes,

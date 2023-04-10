@@ -1,0 +1,21 @@
+{
+  "name": "esma_project",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "predev": "npm i",
+    "dev": "webo dev src/server/server.js -s src/server -c src/client",
+    "build": "webo build --cachebust -s src/server -c src/client",
+    "predeploy": "npm run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "esma": "^0.3.0"
+  },
+  "devDependencies": {
+    "webo": "^4.1.2"
+  }
+}
