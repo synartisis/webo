@@ -17,9 +17,8 @@
   "license": "ISC",
   "dependencies": {
     "mime": "^2.5.2",
-    "parse5": "^5.1.1",
-    "parse5-htmlparser2-tree-adapter": "^5.1.1",
     "rollup": "^3.19.1",
+    "syn-html-parser": "^0.2.0",
     "ws": "^7.4.6"
   }
 }
