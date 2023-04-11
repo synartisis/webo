@@ -18,7 +18,7 @@
   "dependencies": {
     "mime": "^2.5.2",
     "rollup": "^3.19.1",
-    "syn-html-parser": "^0.2.0",
+    "syn-html-parser": "^0.3.2",
     "ws": "^7.4.6"
   }
 }
