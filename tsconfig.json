@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
+    "allowJs": true,
     "checkJs": true,
     "strict": true,
-    "lib": ["ESNext"],
+    "noEmit": true,
     "target": "ESNext",
-    "module": "ESNext",
+    "module": "NodeNext",
     "moduleResolution": "nodenext"
   },
   "exclude": ["lib/commands/templates"]

@@ -1,4 +1,4 @@
-export async function webo(config: Webo.Config, nodeArgs: any): Promise<void>
+export function webo(config: Webo.Config, nodeArgs: any): Promise<void>
 
 
 
